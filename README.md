@@ -1,16 +1,15 @@
-# Codex + Ollama Docker Image
+# Codex OSS + Ollama Docker Image
 
 RTX 6000 Pro Blackwell 向けに、Codex CLI と Ollama を同居させた開発用イメージです。
 
 既定値は次の通りです。
 
-- Codex の標準モデル: `gpt-5.5`
 - Codex のローカル OSS プロファイル: `qwen3.6:35b-ctx65536`
 - Ollama のベースモデル: `qwen3.6:35b`
 - Ollama の既定ローカルモデル: `qwen3.6:35b-ctx65536`
 - Ollama の既定コンテキスト長: `65536`
 
-Codex のモデル選定は OpenAI の公式ガイドに合わせています。Codex では `gpt-5.5` が推奨されています。Ollama 側は、公式の Ollama ドキュメントでローカルの coding 用として案内されているモデル群の中から、Blackwell 世代の大容量 VRAM でも現実的に扱いやすい `qwen3.6:35b` を既定にしています。
+Ollama 側は、ローカルの coding 用として扱いやすい `qwen3.6:35b` を既定にしています。
 
 ## 含まれるもの
 
@@ -34,7 +33,6 @@ docker build -t codex-ollama-blackwell .
 docker run --rm -it \
   --gpus all \
   -p 11434:11434 \
-  -e OPENAI_API_KEY="$OPENAI_API_KEY" \
   -v ollama-models:/root/.ollama \
   -v "$PWD":/workspace \
   -w /workspace \
@@ -65,21 +63,22 @@ codex --oss
 codex-local
 ```
 
-### Codex を OpenAI モデルで使う
-
-`OPENAI_API_KEY` を設定して通常起動します。
-
-```bash
-codex
-```
-
-Codex の既定モデルは `gpt-5.5` です。必要なら `codex -m gpt-5.4` のように上書きできます。
-
 ## Compose
 
 ```bash
 docker compose up --build
 ```
+
+## 起動ラッパー
+
+リポジトリ直下の `local_codex` を PATH に置くか alias を貼ると、指定したディレクトリを `/workspace` にマウントして起動できます。
+
+```bash
+alias local_codex='/path/to/local_codex/local_codex'
+local_codex .
+```
+
+`local_codex ~/src/my-project` のように別ディレクトリも指定できます。引数を続ければ `codex` 側へそのまま渡ります。
 
 ## 調整ポイント
 
@@ -98,9 +97,6 @@ docker compose up --build
 
 ## 参考
 
-- [Codex models](https://developers.openai.com/codex/models)
-- [Codex CLI quickstart](https://developers.openai.com/codex/cli)
-- [Codex OSS mode](https://developers.openai.com/codex/config-advanced)
 - [Ollama Linux install](https://docs.ollama.com/linux)
 - [Ollama context length](https://docs.ollama.com/context-length)
 - [Ollama Docker](https://docs.ollama.com/docker)

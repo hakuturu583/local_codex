@@ -28,8 +28,6 @@ RUN curl -fsSL https://chatgpt.com/codex/install.sh \
     | CODEX_NON_INTERACTIVE=1 sh \
     && mkdir -p /root/.codex \
     && cat > /root/.codex/config.toml <<'EOF'
-model = "gpt-5.5"
-model_provider = "openai"
 oss_provider = "ollama"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"

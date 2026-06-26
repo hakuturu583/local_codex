@@ -10,7 +10,6 @@ services:
       - ./:/workspace
       - ollama-models:/root/.ollama
     environment:
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       OLLAMA_BASE_MODEL: ${OLLAMA_BASE_MODEL:-qwen3.6:35b}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.6:35b-ctx65536}
       OLLAMA_CONTEXT_LENGTH: ${OLLAMA_CONTEXT_LENGTH:-65536}
