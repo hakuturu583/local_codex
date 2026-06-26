@@ -1,0 +1,23 @@
+services:
+  codex-ollama:
+    build: .
+    image: codex-ollama-blackwell:latest
+    tty: true
+    stdin_open: true
+    gpus: all
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+      - ollama-models:/root/.ollama
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OLLAMA_BASE_MODEL: ${OLLAMA_BASE_MODEL:-qwen3.6:35b}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.6:35b-ctx65536}
+      OLLAMA_CONTEXT_LENGTH: ${OLLAMA_CONTEXT_LENGTH:-65536}
+      OLLAMA_PULL_ON_START: ${OLLAMA_PULL_ON_START:-1}
+    ports:
+      - "11434:11434"
+    command: ["bash"]
+
+volumes:
+  ollama-models:
